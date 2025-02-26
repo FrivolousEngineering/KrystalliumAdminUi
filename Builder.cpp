@@ -134,14 +134,20 @@ Zax::JsonApi::Document Builder::emptyEnlisted()
     return document;
 }
 
+Zax::JsonApi::Document Builder::randomEffect()
+{
+    auto document = emptyEffect();
+    QVariantMap values;
+    values[u"action"_s] = randomAction();
+    values[u"target"_s] = randomTarget();
+    values[u"strength"_s] = randomStrength(1, 6);
+    document.setAttributeValues(values);
     return document;
 }
 
 Zax::JsonApi::Document Builder::randomRawSample()
 {
-    auto document = Zax::JsonApi::Document{};
-    document.setType(u"raw"_s);
-    document.setAttributes(rawSampleAttributes);
+    auto document = emptyRawSample();
     QVariantMap values;
     values[u"rfid_id"_s] = randomUuid();
     values[u"positive_action"_s] = randomAction();
@@ -156,31 +162,14 @@ Zax::JsonApi::Document Builder::randomRawSample()
 
 Zax::JsonApi::Document Builder::randomRefinedSample()
 {
-    auto document = Zax::JsonApi::Document{};
-    document.setType(u"refined"_s);
-    document.setAttributes(refinedSampleAttributes);
+    auto document = emptyRefinedSample();
     QVariantMap values;
     values[u"rfid_id"_s] = randomUuid();
     values[u"primary_action"_s] = randomAction();
     values[u"primary_target"_s] = randomTarget();
     values[u"secondary_action"_s] = randomAction();
     values[u"secondary_target"_s] = randomTarget();
-    values[u"strength"_s] = randomStrength(1, 6);
-    document.setAttributeValues(values);
-    return document;
-}
-
-Zax::JsonApi::Document Builder::randomBloodSample()
-{
-    auto document = Zax::JsonApi::Document{};
-    document.setType(u"blood"_s);
-    document.setAttributes(bloodSampleAttributes);
-    QVariantMap values;
-    values[u"rfid_id"_s] = randomUuid();
-    values[u"origin"_s] = randomOrigin();
-    values[u"action"_s] = randomAction();
-    values[u"target"_s] = randomTarget();
-    values[u"strength"_s] = randomStrength(1, 4);
+    values[u"strength"_s] = randomStrength(2, 12);
     document.setAttributeValues(values);
     return document;
 }

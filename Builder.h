@@ -20,7 +20,7 @@ public:
     Q_INVOKABLE static Zax::JsonApi::Document emptyBloodSample();
     Q_INVOKABLE static Zax::JsonApi::Document emptyEnlisted();
 
-    Q_INVOKABLE Zax::JsonApi::Document randomRawSample();
-    Q_INVOKABLE Zax::JsonApi::Document randomRefinedSample();
-    Q_INVOKABLE Zax::JsonApi::Document randomBloodSample();
+    Q_INVOKABLE static Zax::JsonApi::Document randomEffect();
+    Q_INVOKABLE static Zax::JsonApi::Document randomRawSample();
+    Q_INVOKABLE static Zax::JsonApi::Document randomRefinedSample();
 };
