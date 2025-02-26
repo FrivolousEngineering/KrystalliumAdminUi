@@ -100,7 +100,7 @@ Page {
 
                 path: page.path
                 attributes: page.attributes
-                relationships: page.relationships
+                relationships: page.relationships ?? {}
 
                 JsonApi.SortRule {
                     id: sortRule;
