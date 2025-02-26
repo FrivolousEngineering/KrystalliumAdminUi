@@ -10,10 +10,11 @@ Page {
     id: page
 
     property string type
-    property alias path: apiModel.path
-    property alias attributes: apiModel.attributes
-    property alias sortField: sortRule.field
-    property alias sortDirection: sortRule.direction
+    property string path: type
+    property var attributes: {}
+    property var relationships: {}
+    property string sortField
+    property int sortDirection: JsonApi.SortRule.Ascending
 
     property ListView view: list
     property alias model: list.model
@@ -43,7 +44,7 @@ Page {
 
     onVisibleChanged: {
         if (visible) {
-            apiModel.refresh()
+            model.refresh()
         } else {
             detailsBar.close()
         }
@@ -84,9 +85,14 @@ Page {
             model: JsonApi.ApiModel {
                 id: apiModel
 
+                path: page.path
+                attributes: page.attributes
+                relationships: page.relationships
+
                 JsonApi.SortRule {
                     id: sortRule;
-                    direction: JsonApi.SortRule.Ascending
+                    field: page.sortField
+                    direction: page.sortDirection
                 }
             }
         }
