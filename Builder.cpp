@@ -6,33 +6,41 @@
 
 using namespace Qt::StringLiterals;
 
-static const auto rawSampleAttributes = QVariantMap{
-    {u"rfid_id"_s, u"string"_s},
-    {u"positive_action"_s, u"string"_s},
-    {u"positive_target"_s, u"string"_s},
-    {u"negative_action"_s, u"string"_s},
-    {u"negative_target"_s, u"string"_s},
+static const auto effectAttributes = QVariantMap{
+    {u"name"_s, u"string"_s},
+    {u"action"_s, u"action"_s},
+    {u"target"_s, u"target"_s},
     {u"strength"_s, u"int"_s},
+};
+
+#define SAMPLE_ATTRIBUTES \
+    {u"rfid_id"_s, u"string"_s}, \
+    {u"strength"_s, u"int"_s}
+
+static const auto rawSampleAttributes = QVariantMap{
+    SAMPLE_ATTRIBUTES,
+    {u"positive_action"_s, u"action"_s},
+    {u"positive_target"_s, u"target"_s},
+    {u"negative_action"_s, u"action"_s},
+    {u"negative_target"_s, u"target"_s},
     {u"depleted"_s, u"bool"_s},
 };
 
 static const auto refinedSampleAttributes = QVariantMap{
-    {u"rfid_id"_s, u"string"_s},
-    {u"primary_action"_s, u"string"_s},
-    {u"primary_target"_s, u"string"_s},
-    {u"secondary_action"_s, u"string"_s},
-    {u"secondary_target"_s, u"string"_s},
-    {u"strength"_s, u"int"_s},
+    SAMPLE_ATTRIBUTES,
+    {u"primary_action"_s, u"action"_s},
+    {u"primary_target"_s, u"target"_s},
+    {u"secondary_action"_s, u"action"_s},
+    {u"secondary_target"_s, u"target"_s}
 };
 
 static const auto bloodSampleAttributes = QVariantMap{
-    {u"rfid_id"_s, u"string"_s},
-    {u"action"_s, u"string"_s},
-    {u"target"_s, u"string"_s},
-    {u"origin"_s, u"string"_s},
-    {u"strength"_s, u"int"_s},
+    SAMPLE_ATTRIBUTES
 };
 
+static const auto enlistedAttributes = QVariantMap{
+    {u"name"_s, u"string"_s},
+    {u"number"_s, u"string"_s},
 };
 
 static const auto origins = QStringList{
