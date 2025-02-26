@@ -14,9 +14,11 @@ class Builder : public QObject
 public:
     Builder(QObject *parent = nullptr);
 
-    Q_INVOKABLE Zax::JsonApi::Document emptyRawSample();
-    Q_INVOKABLE Zax::JsonApi::Document emptyRefinedSample();
-    Q_INVOKABLE Zax::JsonApi::Document emptyBloodSample();
+    Q_INVOKABLE static Zax::JsonApi::Document emptyEffect();
+    Q_INVOKABLE static Zax::JsonApi::Document emptyRawSample();
+    Q_INVOKABLE static Zax::JsonApi::Document emptyRefinedSample();
+    Q_INVOKABLE static Zax::JsonApi::Document emptyBloodSample();
+    Q_INVOKABLE static Zax::JsonApi::Document emptyEnlisted();
 
     Q_INVOKABLE Zax::JsonApi::Document randomRawSample();
     Q_INVOKABLE Zax::JsonApi::Document randomRefinedSample();

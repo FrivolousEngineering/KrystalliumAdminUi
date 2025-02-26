@@ -54,6 +54,13 @@ static const auto origins = QStringList{
     u"Leofrie"_s,
     u"Kargastan"_s,
 };
+inline Zax::JsonApi::Document emptyDocument(const QString &type, const QVariantMap &attributes)
+{
+    auto document = Zax::JsonApi::Document{};
+    document.setType(type);
+    document.setAttributes(attributes);
+    return document;
+}
 
 static std::mt19937_64 s_randomEngine{std::random_device{}()};
 
@@ -94,24 +101,39 @@ Builder::Builder(QObject *parent)
 
 }
 
+Zax::JsonApi::Document Builder::emptyEffect()
+{
+    return emptyDocument(u"effect"_s, effectAttributes);
+}
+
 Zax::JsonApi::Document Builder::emptyRawSample()
 {
-    auto document = Zax::JsonApi::Document{};
-    document.setAttributes(rawSampleAttributes);
-    return document;
+    return emptyDocument(u"raw"_s, rawSampleAttributes);
 }
 
 Zax::JsonApi::Document Builder::emptyRefinedSample()
 {
-    auto document = Zax::JsonApi::Document{};
-    document.setAttributes(refinedSampleAttributes);
-    return document;
+    return emptyDocument(u"refined"_s, refinedSampleAttributes);
 }
 
 Zax::JsonApi::Document Builder::emptyBloodSample()
 {
-    auto document = Zax::JsonApi::Document{};
-    document.setAttributes(bloodSampleAttributes);
+    auto document = emptyDocument(u"blood"_s, bloodSampleAttributes);
+    document.setRelationships(QVariantMap{
+        {u"effect"_s, u"effect"_s},
+    });
+    return document;
+}
+
+Zax::JsonApi::Document Builder::emptyEnlisted()
+{
+    auto document = emptyDocument(u"enlisted"_s, enlistedAttributes);
+    document.setRelationships(QVariantMap{
+        {u"effects"_s, u"effect"_s},
+    });
+    return document;
+}
+
     return document;
 }
 
