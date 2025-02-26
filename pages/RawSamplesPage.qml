@@ -17,10 +17,10 @@ JsonApiListPage {
     path: "raw"
     attributes: {
         "rfid_id": "string",
-        "positive_action": "string",
-        "positive_target": "string",
-        "negative_action": "string",
-        "negative_target": "string",
+        "positive_action": "action",
+        "positive_target": "target",
+        "negative_action": "action",
+        "negative_target": "target",
         "strength": "int",
     }
     sortField: "id"
@@ -33,12 +33,18 @@ JsonApiListPage {
         Action {
             icon.name: "document-new-symbolic"
             text: "Add Empty"
-            onTriggered: page.currentItem = Admin.Builder.emptyRawSample()
+            onTriggered: {
+                page.details.modified = true
+                page.currentItem = Admin.Builder.emptyRawSample()
+            }
         },
         Action {
             icon.name: "roll-symbolic"
             text: "Generate Random"
-            onTriggered: page.currentItem = Admin.Builder.randomRawSample()
+            onTriggered: {
+                page.details.modified = true
+                page.currentItem = Admin.Builder.randomRawSample()
+            }
         }
     ]
 
@@ -51,92 +57,90 @@ JsonApiListPage {
         onClicked: ListView.view.currentIndex = index
 
         contents: {
-            "Positive": model.positive_action + " " + model.positive_target,
-            "Negative": model.negative_action + " " + model.negative_target,
+            "Positive": Admin.Effects.actionDisplayString(model.positive_action) + " " + Admin.Effects.targetDisplayString(model.positive_target),
+            "Negative": Admin.Effects.actionDisplayString(model.negative_action) + " " + Admin.Effects.targetDisplayString(model.negative_target),
             "Vulgarity": model.strength,
             "RFID": model.rfid_id
         }
     }
 
-    onCurrentIndexChanged: if (currentIndex >= 0) {
-        currentItem = model.get(currentIndex)
-    }
-    onCurrentItemChanged: if (!currentItem) {
-        view.currentIndex = -1
-    }
-
-    detailsVisible: currentItem != null
-    details: ColumnLayout {
-        id: details
-
-        spacing: 8
-
-        RowLayout {
-            Button {
-                icon.name: "document-save-symbolic"
-                text: "Save"
-                flat: true
-
-                onClicked: {
-                    page.request.execute()
-                }
-            }
-
-            Item { Layout.fillWidth: true; }
-
-            Button {
-                icon.name: "dialog-cancel-symbolic"
-                text: "Discard"
-                onClicked: page.currentItem = null
-                flat: true
-            }
-        }
-
+    detailsContents: [
         TextField {
             Layout.fillWidth: true
             enabled: false
             placeholderText: "ID"
-            text: page.currentItem?.id ?? ""
-        }
+            text: page.details.currentItem?.id ?? ""
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "RFID ID"
-            text: page.currentItem?.values.rfid_id ?? ""
-        }
+            text: page.details.currentItem?.values.rfid_id ?? ""
 
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Positive Action"
-            text: page.currentItem?.values.positive_action ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Positive Target"
-            text: page.currentItem?.values.positive_target ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Negative Action"
-            text: page.currentItem?.values.negative_action ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Negative Target"
-            text: page.currentItem?.values.negative_target ?? ""
-        }
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("rfid_id", text)
+            }
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "Vulgarity"
-            text: page.currentItem?.values.strength ?? ""
-        }
+            validator: IntValidator { }
+            text: page.details.currentItem?.values.strength ?? ""
 
-        Item {
-            Layout.fillHeight: true
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("strength", parseInt(text))
+            }
+        },
+
+        Label {
+            text: "Positive:"
+        },
+
+        Controls.ActionComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.positive_action ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("positive_action", currentValue)
+            }
+        },
+
+        Controls.TargetComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.positive_target ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("positive_target", currentValue)
+            }
+        },
+
+        Label {
+            text: "Negative:"
+        },
+
+        Controls.ActionComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.negative_action ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("negative_action", currentValue)
+            }
+        },
+
+        Controls.TargetComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.negative_target ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("negative_target", currentValue)
+            }
         }
-    }
+    ]
 }

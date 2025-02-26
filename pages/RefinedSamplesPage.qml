@@ -16,10 +16,10 @@ JsonApiListPage {
     path: "refined"
     attributes: {
         "rfid_id": "string",
-        "primary_action": "string",
-        "primary_target": "string",
-        "secondary_action": "string",
-        "secondary_target": "string",
+        "primary_action": "action",
+        "primary_target": "target",
+        "secondary_action": "action",
+        "secondary_target": "target",
         "strength": "int",
     }
     sortField: "id"
@@ -28,12 +28,18 @@ JsonApiListPage {
         Action {
             icon.name: "document-new-symbolic"
             text: "Add Empty"
-            onTriggered: page.currentItem = Admin.Builder.emptyRefinedSample()
+            onTriggered: {
+                page.details.modified = true
+                page.currentItem = Admin.Builder.emptyRefinedSample()
+            }
         },
         Action {
             icon.name: "roll-symbolic"
             text: "Generate Random"
-            onTriggered: page.currentItem = Admin.Builder.randomRefinedSample()
+            onTriggered: {
+                page.details.modified = true
+                page.currentItem = Admin.Builder.randomRefinedSample()
+            }
         }
     ]
 
@@ -48,90 +54,90 @@ JsonApiListPage {
         onClicked: ListView.view.currentIndex = index
 
         contents: {
-            "Primary": model.primary_action + " " + model.primary_target,
-            "Secondary": model.secondary_action + " " + model.secondary_target,
+            "Primary": Admin.Effects.actionDisplayString(model.primary_action) + " " + Admin.Effects.targetDisplayString(model.primary_target),
+            "Secondary": Admin.Effects.actionDisplayString(model.secondary_action) + " " + Admin.Effects.targetDisplayString(model.secondary_target),
             "Purity": model.strength,
             "RFID": model.rfid_id
         }
     }
 
-    onCurrentIndexChanged: if (currentIndex >= 0) {
-        currentItem = model.get(currentIndex)
-    }
-    onCurrentItemChanged: if (!currentItem) {
-        view.currentIndex = -1
-    }
-
-    detailsVisible: currentItem != null
-    details: ColumnLayout {
-        id: details
-
-        spacing: 8
-
-        RowLayout {
-            Button {
-                icon.name: "document-save-symbolic"
-                text: "Save"
-                flat: true
-
-                onClicked: {
-                    page.request.execute()
-                }
-            }
-
-            Item { Layout.fillWidth: true }
-
-            Button {
-                icon.name: "edit-delete-remove-symbolic"
-                text: "Discard"
-                onClicked: page.currentItem = null
-                flat: true
-            }
-        }
-
+    detailsContents: [
         TextField {
             Layout.fillWidth: true
             enabled: false
             placeholderText: "ID"
-            text: page.currentItem?.id ?? ""
-        }
+            text: page.details.currentItem?.id ?? ""
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "RFID ID"
-            text: page.currentItem?.values.rfid_id ?? ""
-        }
+            text: page.details.currentItem?.values.rfid_id ?? ""
 
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Primary Action"
-            text: page.currentItem?.values.primary_action ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Primary Target"
-            text: page.currentItem?.values.primary_target ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Secondary Action"
-            text: page.currentItem?.values.secondary_action ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Secondary Target"
-            text: page.currentItem?.values.secondary_target ?? ""
-        }
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("rfid_id", text)
+            }
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "Purity"
-            text: page.currentItem?.values.strength ?? ""
-        }
+            validator: IntValidator { }
+            text: page.details.currentItem?.values.strength ?? ""
 
-        Item { Layout.fillWidth: true; Layout.fillHeight: true }
-    }
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("strength", parseInt(text))
+            }
+        },
+
+        Label {
+            text: "Primary:"
+        },
+
+        Controls.ActionComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.primary_action ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("primary_action", currentValue)
+            }
+        },
+
+        Controls.TargetComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.primary_target ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("primary_target", currentValue)
+            }
+        },
+
+        Label {
+            text: "Secondary:"
+        },
+
+        Controls.ActionComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.secondary_action ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("secondary_action", currentValue)
+            }
+        },
+
+        Controls.TargetComboBox {
+            Layout.fillWidth: true
+            value: page.details.currentItem?.values.secondary_target ?? 0
+
+            onActivated: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("secondary_target", currentValue)
+            }
+        }
+    ]
 }
