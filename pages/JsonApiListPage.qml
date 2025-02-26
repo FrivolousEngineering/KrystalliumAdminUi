@@ -60,6 +60,17 @@ Page {
         }
     }
 
+    onCurrentIndexChanged: {
+        if (currentIndex >= 0) {
+            currentItem = model.get(currentIndex)
+        }
+    }
+    onCurrentItemChanged: {
+        if (!currentItem) {
+            view.currentIndex = -1
+        }
+    }
+
     header: RowLayout {
         Item { Layout.fillWidth: true; Layout.fillHeight: true }
 
