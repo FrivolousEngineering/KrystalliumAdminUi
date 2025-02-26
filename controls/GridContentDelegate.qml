@@ -9,7 +9,7 @@ ItemDelegate {
     id: control
 
     property var contents: { }
-    property int columns: -1
+    property int columns: Math.ceil(__contentModel.length / 2)
 
     width: ListView.view.width
 
@@ -21,29 +21,33 @@ ItemDelegate {
         let result = []
         for (let i in control.contents) {
             result.push({
-                "text": i + ":",
-                "bold": true,
-                "fill": false
-            })
-            result.push({
-                "text": control.contents[i],
-                "bold": false,
-                "fill": true
+                "name": i,
+                "value": control.contents[i],
             })
         }
         return result
     }
 
     contentItem: GridLayout {
-        columns: control.__contentModel.length / 2
+        columns: control.columns
 
         Repeater {
             model: control.__contentModel
 
-            Label {
-                Layout.fillWidth: modelData.fill
-                text: modelData.text
-                font.bold: modelData.bold
+            RowLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
+                    font.bold: true
+                    elide: Text.ElideRight
+                    text: modelData.name
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 3
+                    elide: Text.ElideRight
+                    text: modelData.value
+                }
             }
         }
     }
