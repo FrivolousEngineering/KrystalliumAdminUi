@@ -43,17 +43,6 @@ static const auto enlistedAttributes = QVariantMap{
     {u"number"_s, u"string"_s},
 };
 
-static const auto origins = QStringList{
-    u"Hroth Gaderas"_s,
-    u"Dalvios"_s,
-    u"Vysochiya"_s,
-    u"Grossmark"_s,
-    u"Avros"_s,
-    u"Satrios"_s,
-    u"Alaverde"_s,
-    u"Leofrie"_s,
-    u"Kargastan"_s,
-};
 inline Zax::JsonApi::Document emptyDocument(const QString &type, const QVariantMap &attributes)
 {
     auto document = Zax::JsonApi::Document{};
@@ -82,12 +71,6 @@ int randomStrength(int min, int max)
 {
     std::uniform_int_distribution<int> dist(min, max);
     return dist(s_randomEngine);
-}
-
-QString randomOrigin()
-{
-    std::uniform_int_distribution<int> dist(0, origins.size() - 1);
-    return origins.at(dist(s_randomEngine));
 }
 
 QString randomUuid()
