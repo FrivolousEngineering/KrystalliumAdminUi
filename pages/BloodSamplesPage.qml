@@ -12,27 +12,43 @@ JsonApiListPage {
     id: page
     title: "Blood Samples"
 
+    property var currentEffect: {}
+
+    onCurrentItemChanged: currentEffect = currentItem?.values?.effect ?? {}
+
     type: "blood"
-    path: "blood"
     attributes: {
         "rfid_id": "string",
-        "action": "string",
-        "target": "string",
-        "origin": "string",
         "strength": "int",
+        "effect": "effect",
     }
-    sortField: "id"
+    relationships: {
+        "effect": "effect"
+    }
+
+    model: JsonApi.ApiModel {
+        path: "blood"
+        attributes: page.attributes
+        relationships: page.relationships
+
+        JsonApi.SortRule {
+            field: "id"
+            direction: JsonApi.SortRule.Ascending
+        }
+
+        JsonApi.IncludeRule {
+            field: "effect"
+        }
+    }
 
     actions: [
         Action {
             icon.name: "document-new-symbolic"
-            text: "Add Empty"
-            onTriggered: page.currentItem = Admin.Builder.emptyBloodSample()
-        },
-        Action {
-            icon.name: "roll-symbolic"
-            text: "Generate Random"
-            onTriggered: page.currentItem = Admin.Builder.randomBloodSample()
+            text: "Add New"
+            onTriggered: {
+                page.details.modified = true
+                page.currentItem = Admin.Builder.emptyBloodSample()
+            }
         }
     ]
 
@@ -42,89 +58,74 @@ JsonApiListPage {
         required property int index
         required property var model
 
-        onClicked: ListView.view.currentIndex = index
-
         contents: {
-            "Effect": model.action + " " + model.target,
-            "Origin": model.origin,
+            "RFID": model.rfid_id || "None",
+            "Effect Name": model.effect.values.name,
+            "Effect": Admin.Effects.actionDisplayString(model.effect.values.action) + " " + Admin.Effects.targetDisplayString(model.effect.values.target),
             "Strength": model.strength,
-            "RFID": model.rfid_id
-        }
-    }
-
-    onCurrentIndexChanged: if (currentIndex >= 0) {
-        currentItem = model.get(currentIndex)
-    }
-    onCurrentItemChanged: if (!currentItem) {
-        view.currentIndex = -1
-    }
-
-    detailsVisible: currentItem != null
-    details: ColumnLayout {
-        id: details
-
-        spacing: 8
-
-        RowLayout {
-            Button {
-                icon.name: "document-save-symbolic"
-                text: "Save"
-                flat: true
-
-                onClicked: {
-                    page.request.execute()
-                }
-            }
-
-            Item { Layout.fillWidth: true; }
-
-            Button {
-                icon.name: "dialog-cancel-symbolic"
-                text: "Discard"
-                onClicked: page.currentItem = null
-                flat: true
-            }
         }
 
+        onClicked: ListView.view.currentIndex = index
+    }
+
+    detailsContents: [
         TextField {
             Layout.fillWidth: true
             enabled: false
             placeholderText: "ID"
-            text: page.currentItem?.id ?? ""
-        }
+            text: page.details.currentItem?.id ?? ""
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "RFID ID"
-            text: page.currentItem?.values.rfid_id ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Action"
-            text: page.currentItem?.values.action ?? ""
-        }
-
-        TextField {
-            Layout.fillWidth: true
-            placeholderText: "Target"
-            text: page.currentItem?.values.target ?? ""
-        }
+            text: page.details.currentItem?.values.rfid_id ?? ""
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("rfid_id", text)
+            }
+        },
 
         TextField {
             Layout.fillWidth: true
             placeholderText: "Strength"
-            text: page.currentItem?.values.strength ?? ""
-        }
+            validator: IntValidator { }
+            text: page.details.currentItem?.values.strength ?? ""
+            onTextEdited: {
+                page.details.modified = true
+                page.details.currentItem.setAttributeValue("strength", parseInt(text))
+            }
+        },
 
-        TextField {
+        Label {
+            text: "Effect:"
+        },
+
+        Controls.GridContentDelegate {
             Layout.fillWidth: true
-            placeholderText: "Origin"
-            text: page.currentItem?.values.origin ?? ""
-        }
+            width: 0
 
-        Item {
-            Layout.fillHeight: true
+            checkable: false
+            checked: false
+
+            columns: width < 500 ? 1 : 2
+            contents: {
+                "Name": page.currentEffect?.values?.name ?? "",
+                "Action": Admin.Effects.actionDisplayString(page.currentEffect?.values?.action ?? 0),
+                "Target": Admin.Effects.targetDisplayString(page.currentEffect?.values?.target ?? 0),
+            }
+
+            onClicked: effectDialog.open()
+        }
+    ]
+
+    Controls.EffectDialog {
+        id: effectDialog
+
+        onAccepted: {
+            page.details.modified = true
+            page.currentEffect = selectedEffect
+            page.currentItem.setRelationshipValue("effect", selectedEffect.id)
         }
     }
 }
