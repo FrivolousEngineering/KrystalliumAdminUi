@@ -142,15 +142,30 @@ Page {
         method: page.currentItem && page.currentItem.id ? JsonApi.Request.Patch : JsonApi.Request.Post
         path: page.currentItem && page.currentItem.id ? `${page.path}/${page.currentItem.id}` : page.path
         attributes: page.attributes
-        data: page.currentItem
 
         onSuccess: {
-            apiModel.refresh()
+            page.ApplicationWindow.window.messages.show("Save successful")
+            page.model.refresh()
             detailsBar.close()
+            page.currentIndex = -1
+            page.currentItem = null
         }
 
         onError: {
+            page.ApplicationWindow.window.messages.show("Error encountered while saving: " + errorString)
+        }
+    }
 
+    JsonApi.Request {
+        id: deleteRequest
+
+        method: JsonApi.Request.Delete
+        path: page.currentItem ? `${page.path}/${page.currentItem.id}` : ""
+        attributes: page.attributes
+
+        onSuccess: {
+            page.model.refresh()
+            detailsBar.close()
         }
     }
 }
