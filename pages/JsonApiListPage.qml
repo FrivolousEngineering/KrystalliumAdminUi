@@ -93,6 +93,8 @@ Page {
         ListView {
             id: list
 
+            spacing: 8
+
             model: JsonApi.ApiModel {
                 id: apiModel
 
