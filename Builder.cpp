@@ -2,6 +2,8 @@
 
 #include <random>
 
+#include "Effects.h"
+
 using namespace Qt::StringLiterals;
 
 static const auto rawSampleAttributes = QVariantMap{
@@ -31,37 +33,6 @@ static const auto bloodSampleAttributes = QVariantMap{
     {u"strength"_s, u"int"_s},
 };
 
-static const auto actions = QStringList{
-    u"Increasing"_s,
-    u"Decreasing"_s,
-    u"Creating"_s,
-    u"Destroying"_s,
-    u"Expanding"_s,
-    u"Contracting"_s,
-    u"Fortifying"_s,
-    u"Deteriorating"_s,
-    u"Lightening"_s,
-    u"Encumbering"_s,
-    u"Cooling"_s,
-    u"Heating"_s,
-    u"Conducting"_s,
-    u"Insulating"_s,
-    u"Absorbing"_s,
-    u"Releasing"_s,
-    u"Solidifying"_s,
-};
-
-static const auto targets = QStringList{
-    u"Energy"_s,
-    u"Flesh"_s,
-    u"Sound"_s,
-    u"Gas"_s,
-    u"Krystal"_s,
-    u"Light"_s,
-    u"Liquid"_s,
-    u"Mind"_s,
-    u"Plant"_s,
-    u"Solid"_s,
 };
 
 static const auto origins = QStringList{
@@ -78,16 +49,18 @@ static const auto origins = QStringList{
 
 static std::mt19937_64 s_randomEngine{std::random_device{}()};
 
-QString randomAction()
+Effects::Action randomAction()
 {
-    std::uniform_int_distribution<int> dist(0, actions.size() - 1);
-    return actions.at(dist(s_randomEngine));
+    std::uniform_int_distribution<int> dist(1, int(Effects::ActionCount) - 1);
+    auto action = dist(s_randomEngine);
+    return Effects::Action(action);
 }
 
-QString randomTarget()
+Effects::Target randomTarget()
 {
-    std::uniform_int_distribution<int> dist(0, targets.size() - 1);
-    return targets.at(dist(s_randomEngine));
+    std::uniform_int_distribution<int> dist(1, int(Effects::TargetCount) - 1);
+    auto target = dist(s_randomEngine);
+    return Effects::Target(target);
 }
 
 int randomStrength(int min, int max)
