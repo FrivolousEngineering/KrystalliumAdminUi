@@ -51,7 +51,21 @@ ItemDelegate {
     background: Rectangle {
         radius: Material.LargeScale
 
-        color: delegate.highlighted ? Material.background : (delegate.hovered ? Material.color(Material.Grey, Material.Shade200) : Qt.rgba(1.0, 1.0, 1.0, 0.0))
+        color: {
+            if (control.highlighted) {
+                return Material.background
+            }
+
+            if (control.hovered) {
+                return Material.color(Material.Grey, Material.Shade300)
+            }
+
+            if (control.index % 2 != 0) {
+                return Material.color(Material.Grey, Material.Shade100)
+            }
+
+            return Material.color(Material.Grey, Material.Shade50)
+        }
         Behavior on color { ColorAnimation { duration: 100 } }
 
         Ripple {
