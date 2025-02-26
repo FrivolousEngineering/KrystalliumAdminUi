@@ -118,7 +118,7 @@ Page {
         modal: false
         interactive: false
 
-        width: visible ? Math.max(ApplicationWindow.window.width * 0.25, 200) : 0
+        width: visible ? Math.max(ApplicationWindow.window.width * 0.4, 400) : 0
         height: page.height
 
         leftPadding: 8
