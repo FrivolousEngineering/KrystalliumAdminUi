@@ -7,13 +7,12 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QQuickWindow>
-// #include <QtWebView>
 
 #include <Zax/Core/CommandLineParser.h>
 #include <Zax/JsonApi/Api.h>
 #include <Zax/JsonApi/ApiModel.h>
 
-// #include "Config.h"
+#include "AttributeTypes.h"
 
 using namespace Qt::StringLiterals;
 
@@ -43,6 +42,8 @@ int main(int argc, char* argv[])
         api->setPassword(parser->value<QString>("password"));
         api->start();
     }
+
+    AttributeTypes::registerTypes();
 
     auto engine = std::make_shared<QQmlApplicationEngine>();
     QObject::connect(engine.get(), &QQmlApplicationEngine::objectCreationFailed, app.get(), &QCoreApplication::quit);

@@ -25,6 +25,8 @@ qt_add_qml_module(KrystaliumAdmin URI "Krystal.Admin")
 
 target_sources(KrystaliumAdmin PRIVATE
     main.cpp
+    AttributeTypes.cpp
+    AttributeTypes.h
     Builder.cpp
     Builder.h
 )
