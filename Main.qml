@@ -66,7 +66,7 @@ Core.Application {
 
             Repeater {
                 model: [
-                    // { name: "Overview", page: Qt.resolvedUrl("pages/OverviewPage.qml") },
+                    { name: "Effects", page: Qt.resolvedUrl("pages/EffectsPage.qml") },
                     { name: "Raw Samples", page: Qt.resolvedUrl("pages/RawSamplesPage.qml") },
                     { name: "Refined Samples", page: Qt.resolvedUrl("pages/RefinedSamplesPage.qml") },
                     { name: "Blood Samples", page: Qt.resolvedUrl("pages/BloodSamplesPage.qml") },

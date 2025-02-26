@@ -46,6 +46,7 @@ qt_target_qml_sources(KrystaliumAdmin QML_FILES
     pages/RawSamplesPage.qml
     pages/RefinedSamplesPage.qml
     pages/BloodSamplesPage.qml
+    pages/EffectsPage.qml
 )
 
 target_link_libraries(KrystaliumAdmin PUBLIC Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2 Zax::Core Zax::JsonApi)
