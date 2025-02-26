@@ -70,9 +70,7 @@ Core.Application {
                     { name: "Raw Samples", page: Qt.resolvedUrl("pages/RawSamplesPage.qml") },
                     { name: "Refined Samples", page: Qt.resolvedUrl("pages/RefinedSamplesPage.qml") },
                     { name: "Blood Samples", page: Qt.resolvedUrl("pages/BloodSamplesPage.qml") },
-                    // { name: "Flows", page: Qt.resolvedUrl("pages/FlowsPage.qml") },
-                    // { name: "Devices", page: Qt.resolvedUrl("pages/DevicesPage.qml") },
-                    // { name: "Settings", page: Qt.resolvedUrl("pages/SettingsPage.qml") },
+                    { name: "Enlisted", page: Qt.resolvedUrl("pages/EnlistedPage.qml") },
                 ]
 
                 Button {
