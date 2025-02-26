@@ -1,5 +1,7 @@
 #include "AttributeTypes.h"
 
+#include <QJsonArray>
+
 #include <Zax/JsonApi/Document.h>
 
 #include "Builder.h"
@@ -85,71 +87,14 @@ QVariant AttributeTypes::effectListFromJson(const QJsonValue& input)
 
     QVariantList result;
     for (auto entry : input.toArray()) {
-        qDebug() << entry;
         result.append(effectFromJson(entry));
     }
-    qDebug() << result;
     return result;
 }
 
 QJsonValue AttributeTypes::effectListToJson(const QVariant& input)
 {
+    Q_UNUSED(input);
+    // TODO
     return QJsonValue{};
 }
-
-
-// QVariant AttributeTypes::actionType(const QVariant& input)
-// {
-//     qDebug() << input;
-//     if (input.metaType().id() == QMetaType::QString) {
-//         auto action = Effects::actionFromString(input.toString());
-//         return QVariant::fromValue(action);
-//     } else if (input.metaType().id() == QMetaType::Int) {
-//         auto action = Effects::actionToString(Effects::Action(input.toInt()));
-//         return QVariant::fromValue(action);
-//     } else {
-//         return QVariant{};
-//     }
-// }
-//
-// QVariant AttributeTypes::targetType(const QVariant& input)
-// {
-//     if (input.metaType().id() == QMetaType::QString) {
-//         auto target = Effects::targetFromString(input.toString());
-//         return QVariant::fromValue(target);
-//     } else if (input.metaType().id() == QMetaType::Int) {
-//         auto target = Effects::targetToString(Effects::Target(input.toInt()));
-//         return QVariant::fromValue(target);
-//     } else {
-//         return QVariant{};
-//     }
-// }
-
-// QVariant AttributeTypes::effectType(const QVariant& input)
-// {
-//     auto data = input.value<QVariantMap>();
-//     if (data.isEmpty()) {
-//         return QVariant{};
-//     }
-//
-//     auto document = Builder::emptyEffect();
-//     document.setId(data.value(u"id"_s).toString());
-//     document.setAttributeValues(data);
-//
-//     return QVariant::fromValue(document);
-// }
-//
-// QVariant AttributeTypes::effectListType(const QVariant& input)
-// {
-//     auto data = input.value<QVariantList>();
-//     if (data.isEmpty()) {
-//         return QVariant{};
-//     }
-//
-//     QVariantList result;
-//     for (auto entry : data) {
-//         result.append(effectType(entry));
-//     }
-//
-//     return result;
-// }
