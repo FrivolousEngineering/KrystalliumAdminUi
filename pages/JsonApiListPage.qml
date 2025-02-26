@@ -4,6 +4,8 @@ import QtQuick.Layouts
 
 import Zax.JsonApi as JsonApi
 
+import "../controls" as Controls
+
 Page {
     id: page
 
@@ -20,12 +22,24 @@ Page {
 
     property alias request: requestObject
 
-    property bool detailsVisible: false
-    property Component details
+    property bool detailsVisible: currentItem != null
+    property Control details: detailsEditor
+
+    property alias detailsContents: detailsEditor.contents
 
     property var currentItem: null
 
     property list<Action> actions
+
+    function save() {
+        requestObject.data = currentItem
+        requestObject.execute()
+    }
+
+    function deleteCurrent() {
+        deleteRequest.data = currentItem
+        deleteRequest.execute()
+    }
 
     onVisibleChanged: {
         if (visible) {
@@ -91,11 +105,13 @@ Page {
         leftPadding: 8
         rightPadding: 8
 
-        contentItem: Loader {
-            id: detailsLoader
+        contentItem: Controls.Editor {
+            id: detailsEditor
 
-            active: detailsBar.visible && page.details
-            sourceComponent: page.details
+            currentItem: page.currentItem
+
+            onSave: page.save()
+            onDiscard: page.currentItem = null
         }
     }
 
