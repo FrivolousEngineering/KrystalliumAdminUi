@@ -29,6 +29,8 @@ target_sources(KrystaliumAdmin PRIVATE
     AttributeTypes.h
     Builder.cpp
     Builder.h
+    Effects.cpp
+    Effects.h
 )
 
 qt_target_qml_sources(KrystaliumAdmin QML_FILES
