@@ -37,6 +37,8 @@ qt_target_qml_sources(KrystaliumAdmin QML_FILES
     Main.qml
     controls/SubtitleDelegate.qml
     controls/GridContentDelegate.qml
+    controls/ActionComboBox.qml
+    controls/TargetComboBox.qml
     pages/ConnectPage.qml
     pages/OverviewPage.qml
     pages/JsonApiListPage.qml
