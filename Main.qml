@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 
 import Zax.Core as Core
 
@@ -101,4 +102,25 @@ Core.Application {
             Item { Layout.fillWidth: true; Layout.fillHeight: true }
         }
     }
+
+    messages.delegate: ItemDelegate {
+        required property string message
+
+        width: ListView.view.width
+
+        text: message
+
+        background: Rectangle {
+            radius: Material.LargeScale
+            color: Material.background
+
+            layer.enabled: true
+            layer.effect: RoundedElevationEffect {
+                elevation: 6
+                roundedScale: Material.LargeScale
+            }
+        }
+    }
+    messages.spacing: 8
+    messages.anchors.bottomMargin: 8
 }
