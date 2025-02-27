@@ -168,6 +168,8 @@ Page {
             page.ApplicationWindow.window.messages.show("Successfully deleted")
             page.model.refresh()
             detailsBar.close()
+            page.currentIndex = -1
+            page.currentItem = null
         }
     }
 }
