@@ -20,7 +20,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
     set(BUILD_ANDROID TRUE)
 endif()
 
-add_executable(KrystaliumAdmin)
+qt_add_executable(KrystaliumAdmin)
 qt_add_qml_module(KrystaliumAdmin URI "Krystal.Admin")
 
 target_sources(KrystaliumAdmin PRIVATE
@@ -52,5 +52,9 @@ qt_target_qml_sources(KrystaliumAdmin QML_FILES
 )
 
 target_link_libraries(KrystaliumAdmin PUBLIC Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2 Zax::Core Zax::JsonApi)
+
+if (EMSCRIPTEN)
+    target_link_libraries(KrystaliumAdmin PRIVATE Zax::ZaxCorePlugin Zax::ZaxJsonApiPlugin)
+endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
