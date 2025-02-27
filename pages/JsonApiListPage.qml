@@ -131,6 +131,7 @@ Page {
 
             onSave: page.save()
             onDiscard: page.currentItem = null
+            onRemove: page.deleteCurrent()
         }
     }
 
@@ -164,6 +165,7 @@ Page {
         attributes: page.attributes
 
         onSuccess: {
+            page.ApplicationWindow.window.messages.show("Successfully deleted")
             page.model.refresh()
             detailsBar.close()
         }
