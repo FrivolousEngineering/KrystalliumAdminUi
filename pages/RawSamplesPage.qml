@@ -27,10 +27,6 @@ JsonApiListPage {
 
     actions: [
         Action {
-            text: "Message"
-            onTriggered: page.ApplicationWindow.window.messages.show("Test")
-        },
-        Action {
             icon.name: "document-new-symbolic"
             text: "Add Empty"
             onTriggered: {
